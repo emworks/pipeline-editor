@@ -9,7 +9,7 @@ import Menu from './Menu'
 
 export function AppLogo() {
   return (
-    <Link to='/'>
+    <Link to='/' css={{ display: 'flex' }}>
       <img src={logo} className='logo' alt='logo' />
     </Link>
   )

@@ -5,12 +5,12 @@
 + setup styles
 + choose dataflow library (npm trends)
 + implementation
-- adjust the library
++ adjust the library
 + api layer / export
 - deploy
 - additional documentation/readme
-- setup jest/testing library
-- enchancements (ws? additional reading)
++ setup jest/testing library
++ enchancements (ws? additional reading)
 - send the solution
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app), using the [Redux](https://redux.js.org/) and [Redux Toolkit](https://redux-toolkit.js.org/) template. On top of that, it contains:

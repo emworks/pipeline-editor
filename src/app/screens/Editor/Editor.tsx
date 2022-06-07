@@ -12,8 +12,9 @@ import { pushErrorMessage } from 'src/components/Message'
 import { EditorInstance, PipelineNodeType } from './types'
 import { addQueryNode, addReaderNode, addRetrieverNode } from './nodes'
 import { getAdjustedPosition } from './utils'
-import { ClearButton } from './actions/Clear'
-import ExportButton from './actions/Export'
+import { ClearButton } from './buttons/Clear'
+import ExportButton from './buttons/Export'
+import Sidebar from './sidebar'
 
 import './Editor.css'
 
@@ -35,28 +36,9 @@ const Editor: FC<any> = () => {
     if (!container.current) {
       return
     }
-    const editor = new Drawflow(container.current)
-    editor.start()
-    setEditor(editor as EditorInstance)
-  }, [])
-
-  useEffect(() => {
-    if (!editor) {
-      return
-    }
-    const elements = document.getElementsByClassName('drag-drawflow')
-    for (let i = 0; i < elements.length; i++) {
-      elements[i].addEventListener('touchend', drop, false)
-      elements[i].addEventListener('touchmove', positionMobile, false)
-      elements[i].addEventListener('touchstart', drag, false)
-    }
-    return () => {
-      for (let i = 0; i < elements.length; i++) {
-        elements[i].removeEventListener('touchend', drop)
-        elements[i].removeEventListener('touchmove', positionMobile)
-        elements[i].removeEventListener('touchstart', drag)
-      }
-    }
+    const drawflowEditor = new Drawflow(container.current)
+    drawflowEditor.start()
+    setEditor(drawflowEditor as EditorInstance)
   }, [])
 
   const { data } = useAppSelector(selectPipeline)
@@ -123,17 +105,7 @@ const Editor: FC<any> = () => {
 
   return (
     <Layout>
-      <div className='sidebar'>
-        <div className='drag-drawflow' draggable='true' onDragStart={drag} data-node={PipelineNodeType.Query}>
-          <span>{t('components.pipeline.queryNode')}</span>
-        </div>
-        <div className='drag-drawflow' draggable='true' onDragStart={drag} data-node={PipelineNodeType.Retriever}>
-          <span>{t('components.pipeline.retrieverNode')}</span>
-        </div>
-        <div className='drag-drawflow' draggable='true' onDragStart={drag} data-node={PipelineNodeType.Reader}>
-          <span>{t('components.pipeline.readerNode')}</span>
-        </div>
-      </div>
+      <Sidebar drag={drag} drop={drop} positionMobile={positionMobile} />
       <div id='drawflow' onDrop={drop} onDragOver={(event) => event.preventDefault()} ref={container}>
         <div css={{ position: 'absolute', top: 10, right: 10, zIndex: 1 }}>
           <ClearButton editor={editor!} />

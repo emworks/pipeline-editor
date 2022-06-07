@@ -13,10 +13,6 @@ function Menu() {
   const menuItems = useMemo(
     () => [
       {
-        key: 'dashboard',
-        label: <Link to='/dashboard'>{t('routes.dashboard')}</Link>,
-      },
-      {
         key: 'editor',
         label: <Link to='/editor'>{t('routes.editor')}</Link>,
       },

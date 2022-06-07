@@ -1,6 +1,6 @@
 {
     "translation": {
-        "notFound": "Not found",
+        "notFound": "Page not found",
         "routes": {
             "dashboard": "Dashboard",
             "editor": "Editor"

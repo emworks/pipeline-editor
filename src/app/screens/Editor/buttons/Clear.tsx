@@ -9,6 +9,7 @@ export const ClearButton: FC<{ editor: EditorInstance }> = ({ editor }) => {
 
   const clear = useCallback(() => {
     editor!.clearModuleSelected()
+    editor!.hasQueryNode = false
     pushSuccessMessage(t('messages.pipelineCleared'))
   }, [editor])
 
