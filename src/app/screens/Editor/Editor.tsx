@@ -50,11 +50,11 @@ const Editor: FC<any> = () => {
     editor.import({
       drawflow: {
         Home: {
-          data: { ...data },
+          data: id ? { ...data } : {},
         },
       },
     })
-  }, [data])
+  }, [id, editor, data])
 
   let mobile_item_selec = ''
   let mobile_last_move: any
