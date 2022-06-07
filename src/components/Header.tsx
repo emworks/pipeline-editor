@@ -5,7 +5,6 @@ import logo from 'src/assets/img/logo.svg'
 import { Avatar } from 'antd'
 import { UserOutlined } from '@ant-design/icons'
 import { Link } from 'react-router-dom'
-import { useAccount, useMsal } from '@azure/msal-react'
 import Menu from './Menu'
 
 export function AppLogo() {
@@ -17,11 +16,8 @@ export function AppLogo() {
 }
 
 export function User() {
-  const { accounts } = useMsal()
-  const account = useAccount(accounts[0])
   return (
     <div>
-      {account && account.username}
       <Avatar size='large' icon={<UserOutlined />} css={{ marginLeft: 8 }} />
     </div>
   )
@@ -37,6 +33,7 @@ function Header() {
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
+        borderBottom: '1px solid var(--border-color)',
       }}>
       <AppLogo />
       <Menu />

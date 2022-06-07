@@ -3,10 +3,10 @@
 + setup react/ts skeleton
 + setup state manager
 + setup styles
-- choose dataflow library (npm trends)
-- implementation
++ choose dataflow library (npm trends)
++ implementation
 - adjust the library
-- api layer
++ api layer / export
 - deploy
 - additional documentation/readme
 - setup jest/testing library

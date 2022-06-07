@@ -8,11 +8,12 @@ function App() {
   return (
     <>
       <Router basename={`${process.env.PUBLIC_URL}`}>
-            <Routes>
-              <Route path='/' element={<Navigate to='/editor' />} />
-              <Route path='/editor' element={<Editor />} />
-              <Route path='*' element={<NotFound />} />
-            </Routes>
+        <Routes>
+          <Route path='/' element={<Navigate to='/editor' />} />
+          <Route path='/editor' element={<Editor />} />
+          <Route path='/editor/:id' element={<Editor />} />
+          <Route path='*' element={<NotFound />} />
+        </Routes>
       </Router>
     </>
   )

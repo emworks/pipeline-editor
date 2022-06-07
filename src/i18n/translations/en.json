@@ -1,8 +1,24 @@
 {
     "translation": {
         "notFound": "Not found",
-        "titles": {
+        "routes": {
+            "dashboard": "Dashboard",
             "editor": "Editor"
+        },
+        "components": {
+            "pipeline": {
+                "queryNode": "Query",
+                "retrieverNode": "Retriever",
+                "readerNode": "Reader"
+            }
+        },
+        "buttons": {
+            "clear": "Clear",
+            "export": "Export"
+        },
+        "messages": {
+            "pipelineExported": "Pipeline has been exported",
+            "pipelineCleared": "Pipeline has been cleared"
         }
     }
 }

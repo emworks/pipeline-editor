@@ -1,0 +1,22 @@
+.ant-message {
+    top: initial;
+    bottom: 10px;
+    left: 10px;
+}
+
+.ant-message-notice {
+    text-align: left;
+}
+
+.ant-message-notice-content {
+    position: relative;
+}
+
+.ant-message-notice-content:before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+}

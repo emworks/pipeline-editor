@@ -3,11 +3,11 @@
 import { FC } from 'react'
 import Header from 'src/components/Header'
 
-const Layout: FC<unknown> = ({ children, ...childrenContainerProps }) => {
+const Layout: FC<any> = ({ children, ...childrenContainerProps }) => {
   return (
     <>
       <Header />
-      <div css={{ padding: '0 20px 20px' }} {...childrenContainerProps}>
+      <div css={{ display: 'flex', height: '100vh' }} {...childrenContainerProps}>
         {children}
       </div>
     </>
