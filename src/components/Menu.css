@@ -1,0 +1,9 @@
+.ant-menu-horizontal:not(.ant-menu-dark) {
+    > .ant-menu-item::after {
+        border: none !important;
+    }
+}
+
+.ant-menu-horizontal > .ant-menu-item a {
+    font-weight: 600;
+}

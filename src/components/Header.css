@@ -1,0 +1,12 @@
+.logo {
+  width: 189px;
+  pointer-events: none;
+}
+
+ul.ant-menu {
+  margin-left: 5px;
+}
+
+li.ant-menu-item {
+  margin-left: 15px;
+}
