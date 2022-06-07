@@ -1,16 +1,21 @@
 /** @jsxImportSource @emotion/react */
 
-import React, { FC, useCallback, useEffect, useRef, useState } from 'react'
+import { FC, useCallback, useEffect, useRef, useState } from 'react'
 import Layout from 'src/app/Layout'
 import { useAppDispatch, useAppSelector } from 'src/app/hooks/redux'
 import { useParams } from 'react-router-dom'
 import { fetchPipeline } from 'src/app/store/reducers/pipelineReducer'
 import { useTranslation } from 'react-i18next'
 import Drawflow from 'drawflow'
-import './Editor.css'
 import { selectPipeline } from 'src/app/store/selectors'
-import Button from 'src/components/Button'
-import { pushSuccessMessage } from 'src/components/Message'
+import { pushErrorMessage } from 'src/components/Message'
+import { EditorInstance, PipelineNodeType } from './types'
+import { addQueryNode, addReaderNode, addRetrieverNode } from './nodes'
+import { getAdjustedPosition } from './utils'
+import { ClearButton } from './actions/Clear'
+import ExportButton from './actions/Export'
+
+import './Editor.css'
 
 const Editor: FC<any> = () => {
   const { id } = useParams()
@@ -23,8 +28,8 @@ const Editor: FC<any> = () => {
     }
   }, [id])
 
-  const container: any = useRef(null)
-  const [editor, setEditor] = useState<any>()
+  const container = useRef<HTMLDivElement>(null)
+  const [editor, setEditor] = useState<EditorInstance>()
 
   useEffect(() => {
     if (!container.current) {
@@ -32,7 +37,7 @@ const Editor: FC<any> = () => {
     }
     const editor = new Drawflow(container.current)
     editor.start()
-    setEditor(editor)
+    setEditor(editor as EditorInstance)
   }, [])
 
   useEffect(() => {
@@ -71,20 +76,20 @@ const Editor: FC<any> = () => {
 
   let mobile_item_selec = ''
   let mobile_last_move: any
-  function positionMobile(ev: any) {
-    mobile_last_move = ev
+  function positionMobile(event: any) {
+    mobile_last_move = event
   }
 
-  function drag(ev: any) {
-    if (ev.type === 'touchstart') {
-      mobile_item_selec = ev.target.closest('.drag-drawflow').getAttribute('data-node')
+  function drag(event: any) {
+    if (event.type === 'touchstart') {
+      mobile_item_selec = event.target.closest('.drag-drawflow').getAttribute('data-node')
     } else {
-      ev.dataTransfer.setData('node', ev.target.getAttribute('data-node'))
+      event.dataTransfer.setData('node', event.target.getAttribute('data-node'))
     }
   }
 
-  function drop(ev: any) {
-    if (ev.type === 'touchend') {
+  function drop(event: any) {
+    if (event.type === 'touchend') {
       const parentdrawflow = (document as any)
         .elementFromPoint(mobile_last_move.touches[0].clientX, mobile_last_move.touches[0].clientY)
         .closest('#drawflow')
@@ -93,82 +98,46 @@ const Editor: FC<any> = () => {
       }
       mobile_item_selec = ''
     } else {
-      ev.preventDefault()
-      const data = ev.dataTransfer.getData('node')
-      addNodeToDrawFlow(data, ev.clientX, ev.clientY)
+      event.preventDefault()
+      const data = event.dataTransfer.getData('node')
+      addNodeToDrawFlow(data, event.clientX, event.clientY)
     }
   }
 
-  function allowDrop(ev: any) {
-    ev.preventDefault()
-  }
-
-  function addNodeToDrawFlow(name: any, pos_x: any, pos_y: any) {
-    pos_x =
-      pos_x * (editor.precanvas.clientWidth / (editor.precanvas.clientWidth * editor.zoom)) -
-      editor.precanvas.getBoundingClientRect().x *
-        (editor.precanvas.clientWidth / (editor.precanvas.clientWidth * editor.zoom))
-    pos_y =
-      pos_y * (editor.precanvas.clientHeight / (editor.precanvas.clientHeight * editor.zoom)) -
-      editor.precanvas.getBoundingClientRect().y *
-        (editor.precanvas.clientHeight / (editor.precanvas.clientHeight * editor.zoom))
-
-    switch (name) {
-      case 'query':
-        const query = `
-        <div>
-          <div class="title-box">Query</div>
-        </div>
-        `
-        editor.addNode('query', 0, 1, pos_x, pos_y, 'query', {}, query)
-        break
-
-      case 'retriever':
-        const retriever = `
-        <div>
-          <div class="title-box">Retriever</div>
-        </div>
-        `
-        editor.addNode('retriever', 1, 1, pos_x, pos_y, 'retriever', {}, retriever)
-        break
-
-      default:
-        break
-    }
-  }
-
-  const exportPipeline = useCallback(() => {
-    const data = editor.export()
-    console.log(JSON.stringify(data, null, 4))
-    pushSuccessMessage(t('messages.pipelineExported'))
-  }, [editor])
-
-  const clear = useCallback(() => {
-    editor.clearModuleSelected()
-    pushSuccessMessage(t('messages.pipelineCleared'))
-  }, [editor])
+  const addNodeToDrawFlow = useCallback(
+    (name: any, pos_x: any, pos_y: any) => {
+      const position = getAdjustedPosition(editor!, pos_x, pos_y)
+      switch (name) {
+        case PipelineNodeType.Query:
+          return addQueryNode(editor!, position)
+        case PipelineNodeType.Retriever:
+          return addRetrieverNode(editor!, position)
+        case PipelineNodeType.Reader:
+          return addReaderNode(editor!, position)
+        default:
+          return pushErrorMessage(t('messages.nodeNotImplemented'))
+      }
+    },
+    [editor],
+  )
 
   return (
     <Layout>
       <div className='sidebar'>
-        <div className='drag-drawflow' draggable='true' onDragStart={drag} data-node='query'>
+        <div className='drag-drawflow' draggable='true' onDragStart={drag} data-node={PipelineNodeType.Query}>
           <span>{t('components.pipeline.queryNode')}</span>
         </div>
-        <div className='drag-drawflow' draggable='true' onDragStart={drag} data-node='retriever'>
+        <div className='drag-drawflow' draggable='true' onDragStart={drag} data-node={PipelineNodeType.Retriever}>
           <span>{t('components.pipeline.retrieverNode')}</span>
         </div>
-        <div className='drag-drawflow' draggable='true' onDragStart={drag} data-node='reader'>
+        <div className='drag-drawflow' draggable='true' onDragStart={drag} data-node={PipelineNodeType.Reader}>
           <span>{t('components.pipeline.readerNode')}</span>
         </div>
       </div>
-      <div id='drawflow' onDrop={drop} onDragOver={allowDrop} ref={container}>
+      <div id='drawflow' onDrop={drop} onDragOver={(event) => event.preventDefault()} ref={container}>
         <div css={{ position: 'absolute', top: 10, right: 10, zIndex: 1 }}>
-          <Button type='link' onClick={clear}>
-            {t('buttons.clear')}
-          </Button>
-          <Button type='primary' onClick={exportPipeline}>
-            {t('buttons.export')}
-          </Button>
+          <ClearButton editor={editor!} />
+          <ExportButton editor={editor!} />
         </div>
       </div>
     </Layout>

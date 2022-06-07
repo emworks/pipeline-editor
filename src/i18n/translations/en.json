@@ -18,7 +18,9 @@
         },
         "messages": {
             "pipelineExported": "Pipeline has been exported",
-            "pipelineCleared": "Pipeline has been cleared"
+            "pipelineCleared": "Pipeline has been cleared",
+            "nodeNotImplemented": "Node is not implemented",
+            "hasQueryNode": "Query node can be only one"
         }
     }
 }
