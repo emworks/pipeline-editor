@@ -2,6 +2,7 @@
   "name": "deepset-pipeline",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://emworks.github.io/pipeline-editor",
   "dependencies": {
     "@emotion/react": "^11.9.0",
     "@reduxjs/toolkit": "^1.8.2",
@@ -39,7 +40,9 @@
     "test": "react-scripts test",
     "lint": "eslint --ext .js,.ts,.tsx,.jsx .",
     "lint:fix": "npm run lint -- --fix",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
@@ -61,6 +64,7 @@
   },
   "devDependencies": {
     "@types/drawflow": "^0.0.4",
+    "gh-pages": "^4.0.0",
     "husky": "^8.0.1",
     "webpack": "^5.73.0"
   }
