@@ -37,9 +37,14 @@ const Editor: FC<any> = () => {
       return
     }
     const drawflowEditor = new Drawflow(container.current)
-    drawflowEditor.start()
     setEditor(drawflowEditor as EditorInstance)
   }, [])
+
+  useEffect(() => {
+    if (editor) {
+      editor.start()
+    }
+  }, [editor])
 
   const { data } = useAppSelector(selectPipeline)
 

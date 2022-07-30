@@ -13,10 +13,9 @@ initTranslation({ en }, 'en', 'en')
 const container = document.getElementById('root')
 const root = createRoot(container!)
 root.render(
-  // TODO: investigate how to fix https://andreasheissenberger.medium.com/react-components-render-twice-any-way-to-fix-this-91cf23961625
-  // <React.StrictMode>
-  <Provider store={store}>
-    <App />
-  </Provider>,
-  // </React.StrictMode>,
+  <React.StrictMode>
+    <Provider store={store}>
+      <App />
+    </Provider>
+  </React.StrictMode>,
 )
